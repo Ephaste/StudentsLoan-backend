@@ -28,7 +28,8 @@
     "swagger-ui-express": "^5.0.0"
   },
   "scripts": {
-    "start": "nodemon --exec babel-node server.js"
+    "start": "nodemon --exec babel-node server.js",
+    "type": "module"
   },
   "name": "backend",
   "version": "1.0.0",

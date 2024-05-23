@@ -44,7 +44,7 @@ app.use("/api/funds", fundsRouter)
  });
 
 console.log(process.env.DB_CONNECTION_DEV);
-mongoose.connect(process.env.DB_CONNECTION_DEV).then((res) =>{
+mongoose.connect(process.env.DB_CONNECTION_PROD).then((res) =>{
   console.log("Database connected");
 });
 app.listen(port, () => {
