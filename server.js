@@ -37,7 +37,7 @@ app.use(errorHandler);
 
 // Connect to MongoDB and start the server
 const port = process.env.PORT || 5000;
-const dbConnection = process.env.DB_CONNECTION_PROD || process.env.DB_CONNECTION_DEV;
+const dbConnection = process.env.DB_CONNECTION_DEV || process.env.DB_CONNECTION_DEV;
 
 mongoose.connect(dbConnection, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {

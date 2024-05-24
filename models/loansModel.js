@@ -11,12 +11,21 @@ nId:{
     // maxLength: [30, "Password must be more than 30 characters"],
     default: "2000"
 },
+loanOwner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false,
+  },
 Amount:{
     type: String,
 
 },
 paymentDate:{
     type: String,
+},
+status:{
+    type: String,
+    default: "pending",
 },
 },
 );

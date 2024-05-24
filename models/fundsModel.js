@@ -16,6 +16,12 @@ shares:{
     required: [true, "please add shares"]
 
 },
+fundOwner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false,
+  },
+
 number: String,
 amount:{
     type: String,
@@ -23,4 +29,4 @@ amount:{
 },
 },
 );
-export const Funds = mongoose.model("Funds", fundsSchema);
+export const Fund = mongoose.model("Fund", fundsSchema);
