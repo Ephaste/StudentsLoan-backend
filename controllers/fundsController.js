@@ -1,5 +1,5 @@
 import  {Fund}  from "../models/fundsModel.js";
-import { verifyToken } from "../middleWare/verifyToken";
+import { verifyToken } from "../middleWare/verifyToken.js";
 
 
 

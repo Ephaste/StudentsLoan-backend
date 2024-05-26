@@ -1,5 +1,5 @@
 import  {Loan}  from "../models/loansModel.js";
-import { verifyToken } from "../middleWare/verifyToken";
+import { verifyToken } from "../middleWare/verifyToken.js";
   
 
 
@@ -13,7 +13,7 @@ export const applyLoan = async (req, res) => {
           const newLoan = await Loan.create(loanData);
 
           console.log(newLoan);
-          res.status(201).json(newFund);
+          res.status(201).json(newLoan);
       });
   } catch (error) {
       console.error(error);
@@ -38,6 +38,8 @@ export const getLoansForUser = async (req, res) => {
 };
 
 //Get All Loans applications
+
+//GET ALL LOANS
 export const getAll = async (req, res) => {
   try {
     let allLoans = await Loan.find({});
@@ -46,7 +48,6 @@ export const getAll = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
 //GET BY ID
 export const getbyId = async (req, res) => {
     const loanId = req.params.id; // Assuming the ID is passed as a URL parameter
