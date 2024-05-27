@@ -56,7 +56,7 @@ export const loginUser = async (req, res) => {
     let isPasswordCorrect = await comparePassword(req.body.password, user.password);
     
 
-    if (isPasswordCorrect) {
+    if (!isPasswordCorrect) {
       return res.status(401).json({
         message: "Wrong password----------->",
       });
