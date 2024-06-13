@@ -1,69 +1,95 @@
-import  {Fund}  from "../models/fundsModel.js";
+import { Fund } from "../models/fundsModel.js";
 import { verifyToken } from "../middleWare/verifyToken.js";
 
-
-
-
-//Making a fund
+// Making a fund or updating an existing one
 export const contribute = async (req, res) => {
   try {
-      // Check the user token using the verifyToken middleware
-      verifyToken(req, res, async () => {
-          const fundData = req.body;
-          req.body.fundOwner = req.userId
-          const newFund = await Fund.create(fundData);
+    verifyToken(req, res, async () => {
+      const { nId, amount, shares } = req.body;
+      req.body.fundOwner = req.userId;
 
-          console.log(newFund);
-          res.status(201).json(newFund);
-      });
+      // Ensure amount and shares are valid integers
+      const amountInt = parseInt(amount, 10);
+      const sharesInt = parseInt(shares, 10);
+
+      if (isNaN(amountInt) || isNaN(sharesInt)) {
+        return res.status(400).json({ error: "Amount and shares must be valid integers" });
+      }
+
+      // Check if a fund with the given nId already exists
+      let existingFund = await Fund.findOne({ nId });
+
+      if (existingFund) {
+        // Update the existing fund
+        existingFund.amount += amountInt;
+        existingFund.shares += sharesInt;
+        await existingFund.save();
+        res.status(200).json(existingFund);
+      } else {
+        // Create a new fund
+        const newFund = await Fund.create({ ...req.body, amount: amountInt, shares: sharesInt });
+        res.status(201).json(newFund);
+      }
+    });
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Internal server error" });
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
-  
-  
-//Get All Funds
+
+// Get All Funds
 export const getAll = async (req, res) => {
   try {
-    let allFunds = await Fund.find({});
-    res.status(200).json(allLoans);
+    const allFunds = await Fund.find({});
+    res.status(200).json(allFunds);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
-//Getting onnly funds made by a particular user.
+// Getting only funds made by a particular user
 export const getFundsForUser = async (req, res) => {
   try {
-    // Call the verifyToken middleware to extract user ID from the token
     verifyToken(req, res, async () => {
-      // User ID is now available in req.userId from verifyToken middleware
       const userId = req.userId;
-      // Find hives created by the user
-      let userFunds = await Fund.find({ fundOwner: userId }).populate('fundOwner');
-
+      const userFunds = await Fund.find({ fundOwner: userId }).populate('fundOwner');
       res.status(200).json(userFunds);
     });
   } catch (error) {
-    // Handle token verification or database errors
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
-//GET BY ID
+// GET BY ID
 export const getbyId = async (req, res) => {
-    const fundId = req.params.id; // Assuming the ID is passed as a URL parameter
-  
-    try {
-      const FUND= await Fund.findById(fundId);
-  
-      if (!FUND) {
-        return res.status(404).json({ error: "fund is not found" });
-      }
-  
-      res.status(200).json(FUND);
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
+  const fundId = req.params.id;
+
+  try {
+    const fund = await Fund.findById(fundId);
+
+    if (!fund) {
+      return res.status(404).json({ error: "Fund not found" });
     }
-  };
+
+    res.status(200).json(fund);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Get by national ID (nId)
+export const getbynId = async (req, res) => {
+  const nId = req.params.nId;
+
+  try {
+    const fund = await Fund.findOne({ nId });
+
+    if (!fund) {
+      return res.status(404).json({ error: "This ID has never contributed" });
+    }
+
+    res.status(200).json(fund);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

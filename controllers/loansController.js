@@ -21,7 +21,7 @@ export const applyLoan = async (req, res) => {
   }
 };
   //Getting loans made by a prticular user.
-export const getLoansForUser = async (req, res) => {
+export const getLoansForMember = async (req, res) => {
   try {
     // Call the verifyToken middleware to extract user ID from the token
     verifyToken(req, res, async () => {

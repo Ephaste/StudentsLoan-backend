@@ -22,9 +22,9 @@ fundOwner: {
     required: false,
   },
 
-number: String,
+phone: String,
 amount:{
-    type: String,
+    type: Number,
     required: true,
 },
 },

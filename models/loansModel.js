@@ -16,12 +16,18 @@ loanOwner: {
     ref: 'User',
     required: false,
   },
-Amount:{
+loan:{
     type: String,
 
 },
-paymentDate:{
+months:{
     type: String,
+},
+paymentWay:{
+    type: String,
+},
+amount:{
+    type: Number,
 },
 status:{
     type: String,

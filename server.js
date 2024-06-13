@@ -10,6 +10,8 @@ import loansRouter from "./routes/loansRoute.js";
 import fundsRouter from "./routes/fundsRoute.js";
 import errorHandler from "./middleWare/errorMiddleware.js";
 import cookieParser from 'cookie-parser';
+import contactRouter from "./routes/contactRoute.js";
+import payRouter from "./routes/paidRoute.js";
 
 // Initialize Express app
 const app = express();
@@ -26,6 +28,8 @@ app.use(bodyParser.json());
 app.use("/api/users", userRouter);
 app.use("/api/loans", loansRouter);
 app.use("/api/funds", fundsRouter);
+app.use("/api/contact", contactRouter);
+app.use("/api/payment", payRouter);
 
 // Root Route
 app.get("/", (req, res) => {

@@ -113,3 +113,19 @@ export const getAll = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+//Logout the user
+export const logout = asyncHandler(async (req, res) =>{
+    //Send HTTP-only cookie 
+    res.cookie("token", " ",{
+        path: "/", 
+        httpOnly: true,
+        expires: new Date(0),
+        sameSite: "none",
+        secure: true
+       })
+       // Set cache control headers to prevent caching
+  res.set('Cache-Control', 'no-store');
+  res.set('Pragma', 'no-cache');
+      return res.status(200).json({message: "Succesfully logged Out"})
+    });
+    

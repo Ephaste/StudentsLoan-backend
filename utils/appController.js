@@ -8,7 +8,7 @@ export const sendEmail= async (to,sub,textContent,htlmlContent)=>{
 
     
     console.log("to",to)
-    // console.log("sub",sub,textContent,htlmlContent)
+   // console.log("sub",sub,textContent,htlmlContent)
     
 try{let transporter=nodemailer.createTransport({
     service:"gmail",
