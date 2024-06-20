@@ -1,4 +1,4 @@
-import upload from '../middleware/uploadMiddleware.js'; // Ensure the correct path is used to import the middleware
+import upload from '../middleware/uploadMiddleware.js';
 import Paid from '../models/paidModel.js';
 
 export const Pay = async (req, res) => {
@@ -15,7 +15,7 @@ export const Pay = async (req, res) => {
       let pay = {
         name: req.body.name,
         amount: req.body.amount,
-        document: req.file.path, // Store the file path
+        document: req.file.path, // Store the file URL from Cloudinary
       };
 
       let newPayment = await Paid.create(pay);

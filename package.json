@@ -40,7 +40,7 @@
     "@babel/node": "^7.23.9",
     "@babel/preset-env": "^7.24.5",
     "mocha": "^10.4.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.4"
   },
   "type": "module"
 }
