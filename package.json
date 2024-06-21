@@ -30,6 +30,7 @@
     "nanoid": "^5.0.2",
     "nodemailer": "^6.9.7",
     "paypack-js": "^0.2.1",
+    "react-to-print": "^2.15.1",
     "swagger": "^0.0.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui": "^5.9.0",

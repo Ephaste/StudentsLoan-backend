@@ -1,9 +1,24 @@
-import upload from '../middleware/uploadMiddleware.js';
+import upload from '../middleWare/uploadMiddleware.js';
 import Paid from '../models/paidModel.js';
+import cloudinary from 'cloudinary';
+import dotenv from 'dotenv';
 
-export const Pay = async (req, res) => {
+// Load environment variables
+dotenv.config();
+
+// Cloudinary configuration
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  // api_key: process.env.CLOUDINARY_API_KEY,
+  api_key: 916215824597454,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+
+export const Pay = (req, res) => {
   upload.single('document')(req, res, async (err) => {
     if (err) {
+      console.error(err);
       return res.status(500).json({ error: "Document upload failed" });
     }
 
@@ -12,29 +27,38 @@ export const Pay = async (req, res) => {
     }
 
     try {
-      let pay = {
-        name: req.body.name,
-        amount: req.body.amount,
-        document: req.file.path, // Store the file URL from Cloudinary
-      };
+      // Upload file to Cloudinary
+      const result = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: 'student_loan_documents' // optional, to organize files in folders
+      });
 
-      let newPayment = await Paid.create(pay);
+      const pay = {
+        name: req.body.name, // Ensure the field is 'name'
+        amount: req.body.amount,
+        document: result.secure_url // Use the URL from Cloudinary
+      };
+    
+      const newPayment = await Paid.create(pay);
 
       console.log(newPayment);
       res.status(201).json(newPayment);
+      console.log("key++++++==", api_key);
+      console.log(pay);
+      console.log(process.env.CLOUDINARY_API_SECRET);
     } catch (error) {
+      console.error(error);
       res.status(500).json({ error: "Internal server error" });
     }
   });
 };
 
-
-//GETTING PAYMENTS
+// GETTING PAYMENTS
 export const getAll = async (req, res) => {
-    try {
-      let allPaymets = await Paid.find({});
-      res.status(200).json(allPaymets);
-    } catch (error) {
-      res.status(500).json({ error: "Internal server error" });
-    }
-  };
+  try {
+    const allPayments = await Paid.find({});
+    res.status(200).json(allPayments);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
