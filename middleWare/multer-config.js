@@ -1,12 +1,13 @@
 import multer from 'multer';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
-import cloudinary from './cloudinary.js';
+import path from 'path';
 
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: 'contacts',
-    allowedFormats: ['jpg', 'png', 'pdf', 'docx'],
+// Set up storage configuration for Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
   },
 });
 

@@ -1,20 +1,7 @@
 import upload from '../middleWare/uploadMiddleware.js';
 import Paid from '../models/paidModel.js';
-import cloudinary from 'cloudinary';
-import dotenv from 'dotenv';
 
-// Load environment variables
-dotenv.config();
-
-// Cloudinary configuration
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  // api_key: process.env.CLOUDINARY_API_KEY,
-  api_key: 916215824597454,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
-
-
+// Create Payment
 export const Pay = (req, res) => {
   upload.single('document')(req, res, async (err) => {
     if (err) {
@@ -27,24 +14,14 @@ export const Pay = (req, res) => {
     }
 
     try {
-      // Upload file to Cloudinary
-      const result = await cloudinary.v2.uploader.upload(req.file.path, {
-        folder: 'student_loan_documents' // optional, to organize files in folders
-      });
-
       const pay = {
-        name: req.body.name, // Ensure the field is 'name'
+        name: req.body.name,
         amount: req.body.amount,
-        document: result.secure_url // Use the URL from Cloudinary
+        document: `/uploads/${req.file.filename}` // Use the local file path
       };
-    
-      const newPayment = await Paid.create(pay);
 
-      console.log(newPayment);
-      res.status(201).json(newPayment);
-      console.log("key++++++==", api_key);
-      console.log(pay);
-      console.log(process.env.CLOUDINARY_API_SECRET);
+      const newPayment = await Paid.create(pay);
+      res.status(201).json({ message: "Payment recorded and is under review", newPayment });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal server error" });

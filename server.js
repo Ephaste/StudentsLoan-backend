@@ -1,5 +1,4 @@
 import express from "express";
-import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
@@ -12,6 +11,8 @@ import errorHandler from "./middleWare/errorMiddleware.js";
 import cookieParser from 'cookie-parser';
 import contactRouter from "./routes/contactRoute.js";
 import payRouter from "./routes/paidRoute.js";
+import { __dirname } from "./dirname.js"; // Import the helper function
+import path from "path";
 
 // Initialize Express app
 const app = express();
@@ -20,9 +21,9 @@ const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(bodyParser.json());
+app.use('/uploads', express.static(path.join(__dirname(import.meta.url), 'uploads')));
 
 // Routes Middleware
 app.use("/api/users", userRouter);

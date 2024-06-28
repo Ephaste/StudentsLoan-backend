@@ -5,14 +5,13 @@ name: {
         type: String,
         required: [true, "please add a name"]
     },
-nId:{
+regno:{
     type: String,
     // minLength: [10, "Id mus be over 10 charcters"],
     // maxLength: [30, "Password must be more than 30 characters"],
-    default: "2000"
 },
 shares:{
-    type: String,
+    type: Number,
     required: [true, "please add shares"]
 
 },
@@ -26,6 +25,10 @@ phone: String,
 amount:{
     type: Number,
     required: true,
+},
+received:{
+    type: String,
+    default: "no",
 },
 },
 );

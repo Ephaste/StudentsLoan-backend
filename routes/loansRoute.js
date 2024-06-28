@@ -13,7 +13,7 @@ loansRouter.get("/getall", getAll, verifyToken);
 loansRouter.get("/getmemberloans", getLoansForMember, verifyToken);
 loansRouter.get("/getById/:id", getbyId, verifyToken,isAdmin);
 //loansRouter.get("/getloansforuser", getLoansForUser, verifyToken);
-loansRouter.post("/apply",applyLoan);
+loansRouter.post("/apply",applyLoan, verifyToken);
 loansRouter.put("/update/:id", updateLoan, verifyToken, isAdmin);
 
 

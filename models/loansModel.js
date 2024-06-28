@@ -1,38 +1,45 @@
-
 import mongoose from "mongoose";
+
 const loansSchema = mongoose.Schema({
-name: {
-        type: String,
-        required: [true, "please add a name"]
-    },
-nId:{
+  name: {
     type: String,
-    // minLength: [10, "Id mus be over 10 charcters"],
-    // maxLength: [30, "Password must be more than 30 characters"],
-    default: "2000"
-},
-loanOwner: {
+    required: [true, "please add a name"],
+  },
+  regno: {
+    type: String,
+  },
+  loanOwner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: false,
   },
-loan:{
+  loan: {
     type: String,
-
-},
-months:{
+  },
+  months: {
     type: String,
-},
-paymentWay:{
+  },
+  paymentWay: {
     type: String,
-},
-amount:{
+  },
+  amount: {
     type: Number,
-},
-status:{
+  },
+  status: {
     type: String,
     default: "pending",
+  },
+  remainingAmount: {
+    type: Number,
+    required: true,
+  },
+  totalPaid: {
+    type: Number,
+    default: 0,
+  },
 },
-},
-);
-export const Loan =mongoose.model("Loan", loansSchema);
+{
+    timestamps: true,
+});
+
+export const Loan = mongoose.model("Loan", loansSchema);

@@ -1,11 +1,12 @@
 import { Fund } from "../models/fundsModel.js";
 import { verifyToken } from "../middleWare/verifyToken.js";
+import { User } from "../models/userModel.js";
 
 // Making a fund or updating an existing one
 export const contribute = async (req, res) => {
   try {
     verifyToken(req, res, async () => {
-      const { nId, amount, shares } = req.body;
+      const { amount, shares } = req.body;
       req.body.fundOwner = req.userId;
 
       // Ensure amount and shares are valid integers
@@ -16,8 +17,15 @@ export const contribute = async (req, res) => {
         return res.status(400).json({ error: "Amount and shares must be valid integers" });
       }
 
-      // Check if a fund with the given nId already exists
-      let existingFund = await Fund.findOne({ nId });
+      // Fetch user details
+      const user = await User.findById(req.userId);
+
+      if (!user || user.regno !== req.body.regno) {
+        return res.status(400).json({ error: "Invalid registration number" });
+      }
+
+      // Check if a fund with the given regno already exists
+      let existingFund = await Fund.findOne({ regno: user.regno });
 
       if (existingFund) {
         // Update the existing fund
@@ -36,6 +44,7 @@ export const contribute = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 // Get All Funds
 export const getAll = async (req, res) => {
@@ -77,18 +86,27 @@ export const getbyId = async (req, res) => {
   }
 };
 
-// Get by national ID (nId)
-export const getbynId = async (req, res) => {
-  const nId = req.params.nId;
+//UPDATE A SAVING
+
+
+export const updateSaving = async (req, res) => {
+  const savingId = req.params.id; // Assuming the ID is passed as a URL parameter
+  const updatedData = req.body;
 
   try {
-    const fund = await Fund.findOne({ nId });
+    const foundSaving= await Fund.findById(savingId);
 
-    if (!fund) {
-      return res.status(404).json({ error: "This ID has never contributed" });
+    if (!foundSaving) {
+      return res.status(404).json({ error: "saving is not found" });
     }
 
-    res.status(200).json(fund);
+    // Update the foundCase object with the provided data
+    Object.assign(foundSaving, updatedData);
+
+    // Save the updated case
+    const updatedSaving = await foundSaving.save();
+
+    res.status(200).json(updatedSaving);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }

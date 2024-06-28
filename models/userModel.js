@@ -32,16 +32,19 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "+250"
 },
-nId:{
+regno:{
     type: String,
     // minLength: [10, "Id mus be over 10 charcters"],
     // maxLength: [30, "Password must be more than 30 characters"],
-    default: "2000"
 },
 role:{
     type: String,
     default: "member"
 },
+approved:{
+    type: String,
+    default: "no",
+}
 },
 {
     timestamps: true,
