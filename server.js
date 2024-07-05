@@ -13,7 +13,7 @@ import contactRouter from "./routes/contactRoute.js";
 import payRouter from "./routes/paidRoute.js";
 import { __dirname } from "./dirname.js"; // Import the helper function
 import path from "path";
-
+import payPackRouter from "./routes/paypack.js";
 // Initialize Express app
 const app = express();
 
@@ -31,6 +31,7 @@ app.use("/api/loans", loansRouter);
 app.use("/api/funds", fundsRouter);
 app.use("/api/contact", contactRouter);
 app.use("/api/payment", payRouter);
+app.use("/api/paypack", payPackRouter);
 
 // Root Route
 app.get("/", (req, res) => {

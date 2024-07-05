@@ -10,35 +10,41 @@ const generateToken = (id) => {
 };
 
 // Register User
-export const registerUser = asyncHandler(async (req, res) => {
+export const registerUser = asyncHandler(async (req, res, next) => {
     upload.single('photo')(req, res, async (err) => {
         if (err) {
             console.error(err);
             return res.status(500).json({ error: "Photo upload failed" });
         }
 
-        const { name, email, password, phone,regno, role, approved } = req.body;
+        const { name, email, password, phone, regno, role, approved } = req.body;
         const photo = req.file ? `/uploads/${req.file.filename}` : null; // Use the uploaded file path
 
         // Validation
-        if (!email || !name || !password) {
+        if (!email || !name || !password || !regno) {
             res.status(400);
-            throw new Error("Please fill in all required fields");
+            return res.json({ error: "Please fill in all required fields" });
         }
         if (password.length < 6) {
             res.status(400);
-            throw new Error("Password must be at least 6 characters");
+            return res.json({ error: "Password must be at least 6 characters" });
         }
         if (!photo) {
             res.status(400);
-            throw new Error("Please upload a photo");
+            return res.json({ error: "Please upload a photo" });
         }
 
         // Check if user or email already exists
         const userExist = await User.findOne({ email });
         if (userExist) {
             res.status(400);
-            throw new Error("The email is already used");
+            return res.json({ error: "The email is already used" });
+        }
+        // Check if regno already exists
+        const regExist = await User.findOne({ regno });
+        if (regExist) {
+            res.status(400);
+            return res.json({ error: "The reg number is already used" });
         }
 
         // Create a user
@@ -66,16 +72,17 @@ export const registerUser = asyncHandler(async (req, res) => {
         });
 
         if (user) {
-            const { _id, name, email, phone,regno, photo, role, approved } = user;
+            const { _id, name, email, phone, regno, photo, role, approved } = user;
             res.status(201).json({
-                _id, name, email, phone,regno, photo, role, approved, token
+                _id, name, email, phone, regno, photo, role, approved, token
             });
         } else {
             res.status(400);
-            throw new Error("Invalid user data");
+            return res.json({ error: "Invalid user data" });
         }
     });
 });
+
 
 // Login User
 export const loginUser = asyncHandler(async (req, res) => {

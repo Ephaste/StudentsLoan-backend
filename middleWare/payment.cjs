@@ -9,21 +9,21 @@ const paypack = PaypackJs.config({
 
 //CASH IN
 export const cashin = (req, res) => {
-    paypack.cashin({
-        number: req.body.number,
-        amount: req.body.amount,
-        environment: "production",
-    })
-
-
-    .then((response) => {
+  paypack.cashin({
+      number: req.body.number, // Assuming req.body.number is already a string
+      amount: req.body.amount,
+      environment: "production",
+  })
+  .then((response) => {
       console.log(response.data);
       res.status(200).json(response.data);
-    })
-    .catch((err) => {
+  })
+  .catch((err) => {
       console.log(err);
-    });
+      res.status(500).json({ error: 'Error processing cash-in' });
+  });
 }
+
 //CASH OUT
 export const cashout = (req, res) =>{
     paypack.cashout({
@@ -40,11 +40,11 @@ export const cashout = (req, res) =>{
         console.log(err);
       });
     }
-    //EVENTS
-    paypack.events({ offset: 0, limit: 100 })
-    .then((res) => {
-      console.log("777777777777777777777777777777777777777777",res.data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    // //EVENTS
+    // paypack.events({ offset: 0, limit: 100 })
+    // .then((res) => {
+    //   console.log("777777777777777777777777777777777777777777",res.data);
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
