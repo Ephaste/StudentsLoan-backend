@@ -25,21 +25,26 @@ export const cashin = (req, res) => {
 }
 
 //CASH OUT
-export const cashout = (req, res) =>{
-    paypack.cashout({
-        number: req.body.number,
-        amount: req.body.amount,
-        environment: "production",
-    })
+export const cashout = (req, res) => {
+  paypack.cashout({
+      number: req.body.number,
+      amount: req.body.amount,
+      environment: "production",
+  })
+  .then((response) => {
+      console.log(response.data);
+      res.status(200).json(response.data);
+  })
+  .catch((err) => {
+      console.log(err);
+      if (err.response && err.response.data && err.response.data.message) {
+          res.status(500).json({ error: err.response.data.message });
+      } else {
+          res.status(500).json({ error: 'Error processing cash-out' });
+      }
+  });
+}
 
-    .then((response) => {
-        console.log(response.data);
-        res.status(200).json(response.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
     // //EVENTS
     // paypack.events({ offset: 0, limit: 100 })
     // .then((res) => {

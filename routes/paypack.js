@@ -7,6 +7,6 @@ const { cashin, cashout } = pkg;
 const payPackRouter = express.Router();
 
 payPackRouter.post("/cashin", cashin);
-payPackRouter.get("/cashout", cashout);
+payPackRouter.post("/cashout", cashout);
 
 export default payPackRouter;
